@@ -1,0 +1,38 @@
+{
+  "name": "sadhana-school",
+  "description": "Sadhana Memorial School Management System",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "MONGODB_URL": {
+      "description": "MongoDB connection string",
+      "required": true
+    },
+    "JWT_SECRET": {
+      "description": "JWT secret key",
+      "required": true
+    },
+    "RAZORPAY_KEY_ID": {
+      "description": "Razorpay API Key",
+      "required": false
+    },
+    "RAZORPAY_KEY_SECRET": {
+      "description": "Razorpay API Secret",
+      "required": false
+    },
+    "FRONTEND_URL": {
+      "description": "Frontend URL",
+      "required": true
+    },
+    "ALLOWED_ORIGINS": {
+      "description": "Comma-separated list of allowed CORS origins",
+      "required": true
+    }
+  }
+}
