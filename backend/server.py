@@ -29,9 +29,12 @@ from utils import generate_id, get_current_timestamp, calculate_percentage, gene
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+MONGO_URI = os.getenv("MONGODB_URI")
+client = AsyncIOMotorClient(
+    MONGO_URI,
+    serverSelectionTimeoutMS=5000
+)
+db = client["smart_school_db"]
 
 razorpay_key_id = os.environ.get('RAZORPAY_KEY_ID', '')
 razorpay_key_secret = os.environ.get('RAZORPAY_KEY_SECRET', '')
@@ -125,25 +128,25 @@ async def http_exception_handler(request, exc):
     return JSONResponse(status_code=exc.status_code, content={"error": exc.detail})
 
 # CORS Middleware
-allowed_origins = [
-    origin.strip()
-    for origin in os.getenv(
-        "ALLOWED_ORIGINS",
-        "http://localhost:3000"
-    ).split(",")
-    if origin.strip()
-]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=[
+        "https://school-a8p3.vercel.app",
+        "https://school-i163.vercel.app",
+        "http://localhost:3000"
+    ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["*"],
 )
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Health check endpoint for Render
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
 
 @api_router.get("/")
 async def root():
