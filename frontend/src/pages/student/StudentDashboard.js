@@ -6,7 +6,7 @@ import { Button } from '../../components/ui/button';
 import { Card } from '../../components/ui/card';
 import { 
   GraduationCap, Calendar, BookOpen, DollarSign, Bell, 
-  LogOut, TrendingUp, Award, Sun, Moon, Clipboard
+  LogOut, TrendingUp, Award, Sun, Moon, Clipboard, MessageCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTheme } from '../../context/ThemeContext';
@@ -21,6 +21,9 @@ const StudentDashboard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [timetable, setTimetable] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState([]);
 
   useEffect(() => {
     fetchData();
