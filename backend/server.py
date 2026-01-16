@@ -113,8 +113,7 @@ async def lifespan(app: FastAPI):
     logger.info("Application shutdown")
 
 app = FastAPI(
-    title="Sadhana Memorial School Management System",
-    lifespan=lifespan
+    title="Sadhana Memorial School Management System"
 )
 api_router = APIRouter(prefix="/api")
 
