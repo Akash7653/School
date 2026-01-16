@@ -133,13 +133,17 @@ async def http_exception_handler(request, exc):
     return JSONResponse(status_code=exc.status_code, content={"error": exc.detail})
 
 # CORS Middleware
+allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://school-yef2.vercel.app",
+    "https://school-yef2.vercel.app/",
+    "https://sadhana-school.onrender.com"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://school-a8p3.vercel.app",
-        "https://school-i163.vercel.app",
-        "http://localhost:3000"
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
