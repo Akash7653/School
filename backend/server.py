@@ -30,10 +30,15 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 MONGO_URI = os.getenv("MONGODB_URI")
+
+if not MONGO_URI:
+    raise RuntimeError("MONGODB_URI is not set")
+
 client = AsyncIOMotorClient(
     MONGO_URI,
     serverSelectionTimeoutMS=5000
 )
+
 db = client["smart_school_db"]
 
 razorpay_key_id = os.environ.get('RAZORPAY_KEY_ID', '')
