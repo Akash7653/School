@@ -1643,8 +1643,9 @@ app.include_router(api_router)
 
 @app.get("/")
 async def root():
-    return {"message": "Sadhana Memorial School API", "status": "active", "docs": "/docs", "api": "/api"}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    return {
+        "message": "Sadhana Memorial School API",
+        "status": "active",
+        "docs": "/docs",
+        "api": "/api"
+    }
