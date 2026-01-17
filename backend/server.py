@@ -136,8 +136,8 @@ async def http_exception_handler(request, exc):
 allowed_origins = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://school-yef2.vercel.app",
-    "https://school-yef2.vercel.app/",
+    "https://school-9eq7.vercel.app",
+    "https://school-9eq7.vercel.app/",
     "https://sadhana-school.onrender.com"
 ]
 
