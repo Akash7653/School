@@ -6,7 +6,7 @@ import {
   Microscope, Palette, Music, Calculator, Globe, Clock, Shield, Star, Heart,
   ChevronRight, Play, CheckCircle, TrendingUp, Target, Zap, Coffee, Wifi,
   Bus, Utensils, Stethoscope, Camera, Plane, TreePine, Waves, Mountain,
-  Mail, Phone
+  Mail, Phone, Menu, X
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { Button } from '../components/ui/button';
@@ -17,6 +17,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState('academics');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const fadeUp = {
     initial: { opacity: 0, y: 20 },
@@ -36,22 +37,24 @@ const LandingPage = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Enhanced Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-between items-center">
           <motion.div 
-            className="flex items-center gap-3"
+            className="flex items-center gap-2 md:gap-3"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
           >
             <div className="relative">
-              <GraduationCap className="h-10 w-10 text-slate-900 dark:text-white" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full"></div>
+              <GraduationCap className="h-8 md:h-10 w-8 md:w-10 text-slate-900 dark:text-white" />
+              <div className="absolute -top-1 -right-1 w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
             </div>
             <div>
-              <span className="text-xl font-bold font-['Playfair_Display'] text-slate-900 dark:text-white">Sadhana Memorial School</span>
-              <p className="text-xs text-slate-600 dark:text-slate-400">Est. 1985 • Excellence in Education</p>
+              <span className="text-lg md:text-xl font-bold font-['Playfair_Display'] text-slate-900 dark:text-white">Sadhana Memorial School</span>
+              <p className="text-xs text-slate-600 dark:text-slate-400 hidden sm:block">Est. 1985 • Excellence in Education</p>
             </div>
           </motion.div>
-          <div className="flex items-center gap-4">
+          
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-4">
             <Button variant="ghost" size="sm" onClick={() => document.getElementById('programs').scrollIntoView({ behavior: 'smooth' })}>
               Programs
             </Button>
@@ -84,11 +87,97 @@ const LandingPage = () => {
               Get Started
             </Button>
           </div>
+
+          {/* Mobile and Tablet Navigation */}
+          <div className="lg:hidden flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              data-testid="theme-toggle-button-mobile"
+            >
+              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-slate-900 dark:text-white"
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {mobileMenuOpen && (
+          <motion.div 
+            className="lg:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-4 px-4"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <div className="space-y-3">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start text-slate-900 dark:text-white"
+                onClick={() => {
+                  document.getElementById('programs').scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Programs
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start text-slate-900 dark:text-white"
+                onClick={() => {
+                  document.getElementById('admissions').scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Admissions
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start text-slate-900 dark:text-white"
+                onClick={() => {
+                  document.getElementById('campus').scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Campus
+              </Button>
+              <div className="border-t border-slate-200 dark:border-slate-700 pt-3 mt-3 space-y-3">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-slate-900 dark:text-white"
+                  onClick={() => {
+                    navigate('/auth/login');
+                    setMobileMenuOpen(false);
+                  }}
+                  data-testid="login-mobile-button"
+                >
+                  Login
+                </Button>
+                <Button
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900"
+                  onClick={() => {
+                    navigate('/auth/register');
+                    setMobileMenuOpen(false);
+                  }}
+                  data-testid="register-mobile-button"
+                >
+                  Get Started
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </header>
 
       {/* Enhanced Hero Section */}
-      <section className="relative pt-40 pb-32 px-6 overflow-hidden">
+      <section className="relative pt-28 md:pt-40 pb-16 md:pb-32 px-4 md:px-6 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1759299615947-bc798076b479?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBzY2hvb2wlMjBjYW1wdXMlMjBhcmNoaXRlY3R1cmUlMjBzdHVkZW50c3xlbnwwfHx8fDE3NjgyMjQzMzB8MA&ixlib=rb-4.1.0&q=85"
@@ -106,15 +195,15 @@ const LandingPage = () => {
           variants={stagger}
         >
           <motion.div 
-            className="flex items-center gap-2 mb-6"
+            className="flex items-center gap-2 mb-4 md:mb-6"
             variants={fadeUp}
           >
-            <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-            <span className="text-yellow-400 font-semibold">Ranked #1 School in Region</span>
+            <Star className="h-4 md:h-5 w-4 md:w-5 text-yellow-400 fill-yellow-400" />
+            <span className="text-sm md:text-base text-yellow-400 font-semibold">Ranked #1 School in Region</span>
           </motion.div>
           
           <motion.h1 
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white font-['Playfair_Display'] max-w-4xl mb-6 leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white font-['Playfair_Display'] max-w-4xl mb-4 md:mb-6 leading-tight"
             variants={fadeUp}
             data-testid="hero-title"
           >
@@ -123,38 +212,38 @@ const LandingPage = () => {
           </motion.h1>
           
           <motion.p 
-            className="text-xl text-slate-200 max-w-3xl mb-8 leading-relaxed"
+            className="text-base md:text-lg lg:text-xl text-slate-200 max-w-3xl mb-6 md:mb-8 leading-relaxed"
             variants={fadeUp}
           >
             Empowering young minds since 1985. Join Sadhana Memorial School for a transformative educational journey that shapes future leaders, innovators, and global citizens. Where tradition meets innovation.
           </motion.p>
           
           <motion.div 
-            className="flex flex-wrap gap-4 mb-12"
+            className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 mb-8 md:mb-12"
             variants={fadeUp}
           >
             <Button
               size="lg"
-              className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 text-lg"
+              className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 md:px-8 py-3 md:py-4 text-base md:text-lg"
               onClick={() => navigate('/auth/register')}
               data-testid="hero-cta-button"
             >
-              Apply Now <ArrowRight className="ml-2 h-5 w-5" />
+              Apply Now <ArrowRight className="ml-2 h-4 md:h-5 w-4 md:w-5" />
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white/10 px-8 py-4 text-lg"
+              className="border-white text-white hover:bg-white/10 px-6 md:px-8 py-3 md:py-4 text-base md:text-lg"
               onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })}
               data-testid="learn-more-button"
             >
-              <Play className="mr-2 h-5 w-5" />
+              <Play className="mr-2 h-4 md:h-5 w-4 md:w-5" />
               Watch Virtual Tour
             </Button>
           </motion.div>
 
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-6"
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
             variants={fadeUp}
           >
             {[
@@ -164,8 +253,8 @@ const LandingPage = () => {
               { number: '95%', label: 'Success Rate' }
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl font-bold text-white mb-1">{stat.number}</div>
-                <div className="text-sm text-slate-300">{stat.label}</div>
+                <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.number}</div>
+                <div className="text-xs md:text-sm text-slate-300">{stat.label}</div>
               </div>
             ))}
           </motion.div>
@@ -173,9 +262,9 @@ const LandingPage = () => {
       </section>
 
       {/* Quick Stats Bar */}
-      <section className="py-8 px-6 bg-emerald-500 text-white">
+      <section className="py-6 md:py-8 px-4 md:px-6 bg-emerald-500 text-white">
         <div className="container mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 text-center">
             {[
               { icon: Trophy, label: '50+ Awards' },
               { icon: Globe, label: '15 Countries' },
@@ -186,14 +275,14 @@ const LandingPage = () => {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="flex flex-col items-center gap-2"
+                className="flex flex-col items-center gap-1 md:gap-2"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <item.icon className="h-8 w-8" />
-                <span className="text-sm font-medium">{item.label}</span>
+                <item.icon className="h-6 md:h-8 w-6 md:w-8" />
+                <span className="text-xs md:text-sm font-medium">{item.label}</span>
               </motion.div>
             ))}
           </div>
@@ -201,39 +290,39 @@ const LandingPage = () => {
       </section>
 
       {/* Enhanced About Section */}
-      <section id="about" className="py-24 px-6 bg-white dark:bg-slate-900">
+      <section id="about" className="py-16 md:py-24 px-4 md:px-6 bg-white dark:bg-slate-900">
         <div className="container mx-auto">
           <motion.div 
-            className="grid lg:grid-cols-2 gap-16 items-center"
+            className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
             <div>
               <motion.div 
-                className="flex items-center gap-2 mb-6"
+                className="flex items-center gap-2 mb-4 md:mb-6"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <Heart className="h-6 w-6 text-emerald-500" />
-                <span className="text-emerald-500 font-semibold">Our Legacy</span>
+                <Heart className="h-5 md:h-6 w-5 md:w-6 text-emerald-500" />
+                <span className="text-sm md:text-base text-emerald-500 font-semibold">Our Legacy</span>
               </motion.div>
               
-              <h2 className="text-4xl sm:text-5xl font-bold font-['Playfair_Display'] text-slate-900 dark:text-white mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['Playfair_Display'] text-slate-900 dark:text-white mb-4 md:mb-6">
                 Building Tomorrow's
                 <span className="text-emerald-500"> Leaders Today</span>
               </h2>
               
-              <p className="text-lg text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+              <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 mb-4 md:mb-6 leading-relaxed">
                 Sadhana Memorial School has been a beacon of quality education for over four decades. Founded in 1985 by visionary educator Late Smt. Sadhana Devi, our institution stands as a testament to her dream of providing world-class education rooted in Indian values while embracing global perspectives.
               </p>
               
-              <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+              <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 mb-6 md:mb-8 leading-relaxed">
                 We combine traditional values with modern teaching methodologies to create an environment where students thrive academically, socially, and personally. Our holistic approach ensures that every child discovers their unique potential and develops into a confident, compassionate, and capable individual.
               </p>
 
-              <div className="grid grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
                 {[
                   { icon: Users, label: '2000+ Students', desc: 'From diverse backgrounds', color: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900 dark:text-emerald-300' },
                   { icon: GraduationCap, label: '100+ Faculty', desc: 'Highly qualified educators', color: 'bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300' },
@@ -242,19 +331,19 @@ const LandingPage = () => {
                 ].map((item, index) => (
                   <motion.div
                     key={index}
-                    className="flex gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800"
+                    className="flex gap-3 md:gap-4 p-3 md:p-4 rounded-xl bg-slate-50 dark:bg-slate-800"
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
                     data-testid={`stat-${index}`}
                   >
-                    <div className={`p-3 rounded-lg ${item.color}`}>
-                      <item.icon className="h-6 w-6" />
+                    <div className={`p-2 md:p-3 rounded-lg ${item.color} flex-shrink-0`}>
+                      <item.icon className="h-5 md:h-6 w-5 md:w-6" />
                     </div>
                     <div>
-                      <div className="font-semibold text-slate-900 dark:text-white">{item.label}</div>
-                      <div className="text-sm text-slate-600 dark:text-slate-400">{item.desc}</div>
+                      <div className="text-sm md:text-base font-semibold text-slate-900 dark:text-white">{item.label}</div>
+                      <div className="text-xs md:text-sm text-slate-600 dark:text-slate-400">{item.desc}</div>
                     </div>
                   </motion.div>
                 ))}
@@ -262,7 +351,7 @@ const LandingPage = () => {
 
               <Button
                 size="lg"
-                className="bg-slate-900 hover:bg-slate-800 text-white"
+                className="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-white"
                 onClick={() => document.getElementById('programs').scrollIntoView({ behavior: 'smooth' })}
               >
                 Explore Programs <ChevronRight className="ml-2 h-5 w-5" />
@@ -270,21 +359,21 @@ const LandingPage = () => {
             </div>
             
             <div className="relative">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-2 md:gap-4">
                 <img
                   src="https://images.unsplash.com/photo-1589872880544-76e896b0592c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHwxfHxkaXZlcnNlJTIwc3R1ZGVudHMlMjBzdHVkeWluZyUyMGxpYnJhcnklMjBoYXBweXxlbnwwfHx8fDE3NjgyMjQzMzN8MA&ixlib=rb-4.1.0&q=85"
                   alt="Students Learning"
-                  className="w-full h-64 object-cover rounded-xl shadow-lg"
+                  className="w-full h-40 md:h-64 object-cover rounded-lg md:rounded-xl shadow-lg"
                 />
                 <img
                   src="https://images.unsplash.com/photo-1758685733926-00cba008215b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODd8MHwxfHNlYXJjaHwxfHx0ZWFjaGVyJTIwaGVscGluZyUyMHN0dWRlbnQlMjBjbGFzc3Jvb218ZW58MHx8fHwxNzY4MjI0MzM1fDA&ixlib=rb-4.1.0&q=85"
                   alt="Teacher with Student"
-                  className="w-full h-64 object-cover rounded-xl shadow-lg mt-8"
+                  className="w-full h-40 md:h-64 object-cover rounded-lg md:rounded-xl shadow-lg mt-4 md:mt-8"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-emerald-500 text-white p-6 rounded-xl shadow-xl">
-                <div className="text-3xl font-bold">40+</div>
-                <div className="text-sm">Years of Excellence</div>
+              <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-emerald-500 text-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-xl">
+                <div className="text-2xl md:text-3xl font-bold">40+</div>
+                <div className="text-xs md:text-sm">Years of Excellence</div>
               </div>
             </div>
           </motion.div>
@@ -292,30 +381,30 @@ const LandingPage = () => {
       </section>
 
       {/* Programs Section */}
-      <section id="programs" className="py-24 px-6 bg-slate-50 dark:bg-slate-950">
+      <section id="programs" className="py-16 md:py-24 px-4 md:px-6 bg-slate-50 dark:bg-slate-950">
         <div className="container mx-auto">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-12 md:mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl sm:text-5xl font-bold font-['Playfair_Display'] text-slate-900 dark:text-white mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-['Playfair_Display'] text-slate-900 dark:text-white mb-3 md:mb-4">
               Academic Programs
             </h2>
-            <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+            <p className="text-base md:text-lg lg:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
               Comprehensive educational programs designed to nurture every aspect of your child's development
             </p>
           </motion.div>
 
           {/* Tab Navigation */}
-          <div className="flex justify-center mb-12">
+          <div className="flex justify-center mb-8 md:mb-12 overflow-x-auto">
             <div className="bg-white dark:bg-slate-900 rounded-xl shadow-lg p-2 inline-flex gap-2">
               {['academics', 'sports', 'arts', 'technology'].map((tab) => (
                 <Button
                   key={tab}
                   variant={activeTab === tab ? 'default' : 'ghost'}
-                  className={`px-6 py-3 capitalize ${activeTab === tab ? 'bg-emerald-500 text-white' : 'text-slate-600 dark:text-slate-400'}`}
+                  className={`px-4 md:px-6 py-2 md:py-3 capitalize text-sm md:text-base whitespace-nowrap ${activeTab === tab ? 'bg-emerald-500 text-white' : 'text-slate-600 dark:text-slate-400'}`}
                   onClick={() => setActiveTab(tab)}
                 >
                   {tab}
@@ -325,7 +414,7 @@ const LandingPage = () => {
           </div>
 
           {/* Tab Content */}
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {activeTab === 'academics' && [
               {
                 icon: BookOpen,
@@ -348,22 +437,22 @@ const LandingPage = () => {
             ].map((program, index) => (
               <motion.div
                 key={index}
-                className="bg-white dark:bg-slate-900 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all"
+                className="bg-white dark:bg-slate-900 rounded-lg md:rounded-xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
               >
-                <div className="bg-emerald-100 dark:bg-emerald-900 p-4 rounded-xl inline-block mb-6">
-                  <program.icon className="h-8 w-8 text-emerald-600 dark:text-emerald-300" />
+                <div className="bg-emerald-100 dark:bg-emerald-900 p-3 md:p-4 rounded-lg md:rounded-xl inline-block mb-4 md:mb-6">
+                  <program.icon className="h-6 md:h-8 w-6 md:w-8 text-emerald-600 dark:text-emerald-300" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{program.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-6">{program.description}</p>
+                <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white mb-3 md:mb-4">{program.title}</h3>
+                <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 mb-4 md:mb-6">{program.description}</p>
                 <ul className="space-y-2">
                   {program.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      <CheckCircle className="h-4 w-4 text-emerald-500" />
+                    <li key={idx} className="flex items-center gap-2 text-xs md:text-sm text-slate-600 dark:text-slate-400">
+                      <CheckCircle className="h-3 md:h-4 w-3 md:w-4 text-emerald-500 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -393,22 +482,22 @@ const LandingPage = () => {
             ].map((program, index) => (
               <motion.div
                 key={index}
-                className="bg-white dark:bg-slate-900 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all"
+                className="bg-white dark:bg-slate-900 rounded-lg md:rounded-xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
               >
-                <div className="bg-orange-100 dark:bg-orange-900 p-4 rounded-xl inline-block mb-6">
-                  <program.icon className="h-8 w-8 text-orange-600 dark:text-orange-300" />
+                <div className="bg-orange-100 dark:bg-orange-900 p-3 md:p-4 rounded-lg md:rounded-xl inline-block mb-4 md:mb-6">
+                  <program.icon className="h-6 md:h-8 w-6 md:w-8 text-orange-600 dark:text-orange-300" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{program.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-6">{program.description}</p>
+                <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white mb-3 md:mb-4">{program.title}</h3>
+                <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 mb-4 md:mb-6">{program.description}</p>
                 <ul className="space-y-2">
                   {program.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      <CheckCircle className="h-4 w-4 text-orange-500" />
+                    <li key={idx} className="flex items-center gap-2 text-xs md:text-sm text-slate-600 dark:text-slate-400">
+                      <CheckCircle className="h-3 md:h-4 w-3 md:w-4 text-orange-500 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -438,22 +527,22 @@ const LandingPage = () => {
             ].map((program, index) => (
               <motion.div
                 key={index}
-                className="bg-white dark:bg-slate-900 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all"
+                className="bg-white dark:bg-slate-900 rounded-lg md:rounded-xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
               >
-                <div className="bg-purple-100 dark:bg-purple-900 p-4 rounded-xl inline-block mb-6">
-                  <program.icon className="h-8 w-8 text-purple-600 dark:text-purple-300" />
+                <div className="bg-purple-100 dark:bg-purple-900 p-3 md:p-4 rounded-lg md:rounded-xl inline-block mb-4 md:mb-6">
+                  <program.icon className="h-6 md:h-8 w-6 md:w-8 text-purple-600 dark:text-purple-300" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{program.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-6">{program.description}</p>
+                <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white mb-3 md:mb-4">{program.title}</h3>
+                <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 mb-4 md:mb-6">{program.description}</p>
                 <ul className="space-y-2">
                   {program.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      <CheckCircle className="h-4 w-4 text-purple-500" />
+                    <li key={idx} className="flex items-center gap-2 text-xs md:text-sm text-slate-600 dark:text-slate-400">
+                      <CheckCircle className="h-3 md:h-4 w-3 md:w-4 text-purple-500 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -483,22 +572,22 @@ const LandingPage = () => {
             ].map((program, index) => (
               <motion.div
                 key={index}
-                className="bg-white dark:bg-slate-900 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all"
+                className="bg-white dark:bg-slate-900 rounded-lg md:rounded-xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
               >
-                <div className="bg-blue-100 dark:bg-blue-900 p-4 rounded-xl inline-block mb-6">
-                  <program.icon className="h-8 w-8 text-blue-600 dark:text-blue-300" />
+                <div className="bg-blue-100 dark:bg-blue-900 p-3 md:p-4 rounded-lg md:rounded-xl inline-block mb-4 md:mb-6">
+                  <program.icon className="h-6 md:h-8 w-6 md:w-8 text-blue-600 dark:text-blue-300" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{program.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-6">{program.description}</p>
+                <h3 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white mb-3 md:mb-4">{program.title}</h3>
+                <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 mb-4 md:mb-6">{program.description}</p>
                 <ul className="space-y-2">
                   {program.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      <CheckCircle className="h-4 w-4 text-blue-500" />
+                    <li key={idx} className="flex items-center gap-2 text-xs md:text-sm text-slate-600 dark:text-slate-400">
+                      <CheckCircle className="h-3 md:h-4 w-3 md:w-4 text-blue-500 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -1193,87 +1282,87 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 px-6 bg-slate-900 text-white">
+      <footer className="py-12 md:py-16 px-4 md:px-6 bg-slate-900 text-white">
         <div className="container mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-8 md:mb-12">
             <div>
-              <div className="flex items-center gap-3 mb-6">
-                <GraduationCap className="h-8 w-8 text-emerald-500" />
+              <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                <GraduationCap className="h-6 md:h-8 w-6 md:w-8 text-emerald-500" />
                 <div>
-                  <h3 className="text-xl font-bold font-['Playfair_Display']">Sadhana Memorial</h3>
-                  <p className="text-sm text-slate-400">Excellence Since 1985</p>
+                  <h3 className="text-lg md:text-xl font-bold font-['Playfair_Display']">Sadhana Memorial</h3>
+                  <p className="text-xs md:text-sm text-slate-400">Excellence Since 1985</p>
                 </div>
               </div>
-              <p className="text-slate-400 mb-4">
+              <p className="text-sm text-slate-400 mb-4">
                 Providing world-class education with Indian values for over four decades.
               </p>
-              <div className="flex gap-4">
-                <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
-                  <Globe className="h-4 w-4" />
+              <div className="flex gap-3 md:gap-4">
+                <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white p-1 md:p-2">
+                  <Globe className="h-4 md:h-5 w-4 md:w-5" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
-                  <Mail className="h-4 w-4" />
+                <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white p-1 md:p-2">
+                  <Mail className="h-4 md:h-5 w-4 md:w-5" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
-                  <Phone className="h-4 w-4" />
+                <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white p-1 md:p-2">
+                  <Phone className="h-4 md:h-5 w-4 md:w-5" />
                 </Button>
               </div>
             </div>
             
             <div>
-              <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
-              <ul className="space-y-3">
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">About Us</Button></li>
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">Academics</Button></li>
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">Admissions</Button></li>
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">Facilities</Button></li>
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">Contact</Button></li>
+              <h4 className="text-base md:text-lg font-semibold mb-4 md:mb-6">Quick Links</h4>
+              <ul className="space-y-2 md:space-y-3">
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">About Us</Button></li>
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">Academics</Button></li>
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">Admissions</Button></li>
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">Facilities</Button></li>
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">Contact</Button></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="text-lg font-semibold mb-6">Programs</h4>
-              <ul className="space-y-3">
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">Primary School</Button></li>
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">Middle School</Button></li>
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">Senior School</Button></li>
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">Sports Academy</Button></li>
-                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start">Arts & Culture</Button></li>
+              <h4 className="text-base md:text-lg font-semibold mb-4 md:mb-6">Programs</h4>
+              <ul className="space-y-2 md:space-y-3">
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">Primary School</Button></li>
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">Middle School</Button></li>
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">Senior School</Button></li>
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">Sports Academy</Button></li>
+                <li><Button variant="ghost" className="text-slate-400 hover:text-white justify-start text-sm md:text-base px-0">Arts & Culture</Button></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="text-lg font-semibold mb-6">Contact Info</h4>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Building2 className="h-5 w-5 text-emerald-500" />
+              <h4 className="text-base md:text-lg font-semibold mb-4 md:mb-6">Contact Info</h4>
+              <div className="space-y-3 md:space-y-4 text-xs md:text-sm">
+                <div className="flex items-start gap-2 md:gap-3">
+                  <Building2 className="h-4 md:h-5 w-4 md:w-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                   <span className="text-slate-400">123 Education Road, New Delhi - 110001</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-emerald-500" />
+                <div className="flex items-center gap-2 md:gap-3">
+                  <Phone className="h-4 md:h-5 w-4 md:w-5 text-emerald-500 flex-shrink-0" />
                   <span className="text-slate-400">+91 11 2345 6789</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-emerald-500" />
+                <div className="flex items-center gap-2 md:gap-3">
+                  <Mail className="h-4 md:h-5 w-4 md:w-5 text-emerald-500 flex-shrink-0" />
                   <span className="text-slate-400">info@sadhanamemorial.edu</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Clock className="h-5 w-5 text-emerald-500" />
+                <div className="flex items-center gap-2 md:gap-3">
+                  <Clock className="h-4 md:h-5 w-4 md:w-5 text-emerald-500 flex-shrink-0" />
                   <span className="text-slate-400">Mon - Sat: 8:00 AM - 4:00 PM</span>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="border-t border-slate-800 pt-8">
+          <div className="border-t border-slate-800 pt-6 md:pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-slate-400 text-sm">
+              <p className="text-slate-400 text-xs md:text-sm text-center md:text-left">
                 &copy; 2025 Sadhana Memorial School. All rights reserved. | CBSE Affiliated | ISO 9001:2015 Certified
               </p>
-              <div className="flex gap-6 text-sm text-slate-400">
-                <Button variant="ghost" className="text-slate-400 hover:text-white">Privacy Policy</Button>
-                <Button variant="ghost" className="text-slate-400 hover:text-white">Terms of Use</Button>
-                <Button variant="ghost" className="text-slate-400 hover:text-white">Sitemap</Button>
+              <div className="flex gap-4 md:gap-6 text-xs md:text-sm">
+                <Button variant="ghost" className="text-slate-400 hover:text-white px-2 md:px-4">Privacy Policy</Button>
+                <Button variant="ghost" className="text-slate-400 hover:text-white px-2 md:px-4">Terms of Use</Button>
+                <Button variant="ghost" className="text-slate-400 hover:text-white px-2 md:px-4">Sitemap</Button>
               </div>
             </div>
           </div>
